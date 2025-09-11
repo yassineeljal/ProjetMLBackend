@@ -1,4 +1,8 @@
 package projet.backend.repositories;
 
-public interface PeopleRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import projet.backend.models.People;
+
+public interface PeopleRepository extends JpaRepository<People, Long> {
+    People findPeopleByName(String name);
 }
