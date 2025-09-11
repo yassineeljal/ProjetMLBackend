@@ -23,4 +23,31 @@ public class PeopleService {
         }
         return peoples;
     }
+
+    public boolean addPeople(People people) {
+        peopleRepository.save(people);
+        return true;
+    }
+
+    public void deletePeople(String id) {
+       Long newId = Long.parseLong(id);
+       People people = peopleRepository.findPeopleById(newId);
+       peopleRepository.delete(people);
+    }
+
+    public void updatePeople(People people) {
+        People editPeople = peopleRepository.findPeopleById(people.getId());
+        if (editPeople != null) {
+            if (!people.getName().isBlank()) {
+                editPeople.setName(people.getName());
+            }
+            if (!people.getGender().isBlank()){
+                editPeople.setGender(people.getGender());
+            }
+            if (people.getAge() != 0){
+                editPeople.setAge(people.getAge());
+            }
+        }
+    }
+
 }
