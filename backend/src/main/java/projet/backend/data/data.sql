@@ -31,7 +31,7 @@ INSERT INTO people (age, gender, name) VALUES
                                            (35, 'Autre', 'Sam Beaulieu');
 
 -- Serie (note est une String → entre quotes ; 'gender' = genre de la série)
-INSERT INTO serie (title, gender, nbEpisodes, note) VALUES
+INSERT INTO serie (title, gender, nb_Episodes, note) VALUES
                                                         ('Breaking Bad', 'Drama', 62, '4.9'),
                                                         ('One Piece', 'Anime', 1100, '4.7'),
                                                         ('Stranger Things', 'Sci-Fi', 34, '4.5'),
