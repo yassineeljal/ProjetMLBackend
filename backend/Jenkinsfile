@@ -1,26 +1,54 @@
 pipeline {
 	agent any
 
-    tools {
+  tools {
 		maven 'maven'
-        jdk 'jdk17'
+    jdk   'jdk17'
+  }
+
+  options { skipDefaultCheckout(true) }
+
+  stages {
+		stage('Checkout') {
+			steps {
+				checkout scm
+      }
     }
 
-    stages {
-		stage('Build') {
+    stage('Build') {
 			steps {
-				bat 'mvn clean compile'
-            }
+				dir('backend') {
+					bat 'mvn -B clean compile'
         }
-        stage('Test') {
-			steps {
-				bat 'mvn test'
-            }
-        }
-        stage('Package') {
-			steps {
-				bat 'mvn package'
-            }
-        }
+      }
     }
+
+    stage('Test') {
+			steps {
+				dir('backend') {
+					bat 'mvn -B test'
+        }
+      }
+      post {
+				always {
+          junit 'backend/target/surefire-reports/*.xml'
+        }
+      }
+    }
+
+    stage('Package') {
+			steps {
+				dir('backend') {
+					bat 'mvn -B package'
+        }
+      }
+    }
+  }
+
+  post {
+		success {
+			// archive le .jar construit
+      archiveArtifacts artifacts: 'backend/target/*.jar', fingerprint: true
+    }
+  }
 }
