@@ -40,6 +40,20 @@ public class SerieController {
         serieService.deleteSerie(id);
     }
 
+    @GetMapping("/search")
+    public List<Serie> searchSeries(@RequestParam(required = false) String genre) {
+        return serieService.search(genre);
+    }
+
+    @GetMapping("/search")
+    public List<Serie> searchSeries(@RequestParam(required = false) String genre,@RequestParam(required = false) Integer minEpisodes ) {
+        return serieService.search(genre, minEpisodes);
+    }
+
+    @GetMapping("/search/title")
+    public List<Serie> searchByTitle(@RequestParam String title) {
+        return serieService.searchByTitle(title);
+    }
 
 
 

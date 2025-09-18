@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import projet.backend.models.Serie;
 import projet.backend.repositories.SerieRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,4 +53,38 @@ public class SerieService {
             serieRepository.delete(serie);
         }
     }
+    public List<Serie> search(String genre) {
+        if (genre == null || genre.isEmpty()) {
+            return serieRepository.findAll();
+        } else {
+            return serieRepository.findByGenre(genre);
+        }
+    }
+
+    public List<Serie> search(String genre, Integer minEpisodes) {
+        if ((genre == null || genre.isEmpty()) && minEpisodes == null) {
+            return serieRepository.findAll();
+        }
+        else if (genre != null && !genre.isEmpty() && minEpisodes == null) {
+            return serieRepository.findByGenre(genre);
+        }
+        else if ((genre == null || genre.isEmpty()) && minEpisodes != null) {
+            return serieRepository.findByNbEpisodesGreaterThanEqual(minEpisodes);
+        }
+        else {
+            List<Serie> series = serieRepository.findByGenre(genre);
+            List<Serie> filteredSeries = new ArrayList<>();
+            for (Serie serie : series) {
+                if (serie.getNbEpisodes() >= minEpisodes) {
+                    filteredSeries.add(serie);
+                }
+            }
+            return filteredSeries;
+        }
+    }
+    public List<Serie> searchByTitle(String title) {
+        return serieRepository.findByTitle(title);
+    }
+
+
 }
