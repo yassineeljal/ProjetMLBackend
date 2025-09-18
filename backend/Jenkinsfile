@@ -2,35 +2,49 @@ pipeline {
 	agent any
 
     tools {
-		jdk 'jdk17'     // nom que tu as mis dans Jenkins pour JDK
-        maven 'maven'   // nom que tu as mis dans Jenkins pour Maven
+		jdk 'jdk17'
+    }
+
+    environment {
+        MVN_HOME = tool name: 'maven', type: 'hudson.tasks.Maven$MavenInstallation'
+        PATH = "%MVN_HOME%\\bin;%PATH%"
     }
 
     stages {
-		stage('Build') {
+		stage('Checkout') {
 			steps {
-				bat 'mvn clean compile'
+				checkout scm
             }
         }
+
+        stage('Build') {
+			steps {
+                bat 'mvn -v'
+                bat 'mvn -B -f backend/pom.xml clean compile'
+            }
+        }
+
         stage('Test') {
 			steps {
-				bat 'mvn test'
+				bat 'mvn -B -f backend/pom.xml test'
             }
             post {
 				always {
-					junit '**/target/surefire-reports/*.xml'
+					junit 'backend/**/target/surefire-reports/*.xml'
                 }
             }
         }
+
         stage('Package') {
 			steps {
-				bat 'mvn package'
+				bat 'mvn -B -f backend/pom.xml package'
             }
-            post {
-				success {
-					archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-                }
-            }
+        }
+    }
+
+    post {
+		success {
+			archiveArtifacts artifacts: 'backend/**/target/*.jar', fingerprint: true
         }
     }
 }
