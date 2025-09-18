@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         MVN_HOME = tool name: 'maven', type: 'hudson.tasks.Maven$MavenInstallation'
-        PATH = "%MVN_HOME%\\bin;%PATH%"
+        MVN = "%MVN_HOME%\\bin\\mvn.cmd"
     }
 
     stages {
@@ -19,14 +19,14 @@ pipeline {
 
         stage('Build') {
 			steps {
-                bat 'mvn -v'
-                bat 'mvn -B -f backend/pom.xml clean compile'
+				bat "\"%MVN%\" -v"
+                bat "\"%MVN%\" -B -f backend/pom.xml clean compile"
             }
         }
 
         stage('Test') {
 			steps {
-				bat 'mvn -B -f backend/pom.xml test'
+				bat "\"%MVN%\" -B -f backend/pom.xml test"
             }
             post {
 				always {
@@ -37,7 +37,7 @@ pipeline {
 
         stage('Package') {
 			steps {
-				bat 'mvn -B -f backend/pom.xml package'
+				bat "\"%MVN%\" -B -f backend/pom.xml package"
             }
         }
     }
