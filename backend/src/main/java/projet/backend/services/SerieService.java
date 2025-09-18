@@ -53,13 +53,7 @@ public class SerieService {
             serieRepository.delete(serie);
         }
     }
-    public List<Serie> search(String genre) {
-        if (genre == null || genre.isEmpty()) {
-            return serieRepository.findAll();
-        } else {
-            return serieRepository.findByGender(genre);
-        }
-    }
+
 
     public List<Serie> search(String genre, Integer minEpisodes) {
         if ((genre == null || genre.isEmpty()) && minEpisodes == null) {

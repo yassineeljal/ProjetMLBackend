@@ -51,8 +51,4 @@ public class SerieController {
         return serieService.searchByTitle(title);
     }
 
-
-
-
-
 }
