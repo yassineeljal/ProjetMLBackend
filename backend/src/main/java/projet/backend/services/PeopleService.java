@@ -47,6 +47,8 @@ public class PeopleService {
             if (people.getAge() != 0){
                 editPeople.setAge(people.getAge());
             }
+            peopleRepository.save(editPeople);
+
         }
     }
 
