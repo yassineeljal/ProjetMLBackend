@@ -9,6 +9,7 @@ import projet.backend.repositories.HistoryRepository;
 import projet.backend.repositories.PeopleRepository;
 import projet.backend.repositories.SerieRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,9 +23,20 @@ public class HistoryService {
     @Autowired
     SerieRepository serieRepository;
 
-    public List<History> getPeopleHistory(String id) {
+    public List<Serie> getPeopleHistory(String id) {
         Long newId = Long.parseLong(id);
-        return historyRepository.findByPeopleId(newId);
+        List<Serie> serieList = new ArrayList<>();
+        List<History> histories = historyRepository.findByPeopleId(newId);
+        for (History history : histories) {
+            Serie serie = new Serie();
+            serie.setId(history.getSerie().getId());
+            serie.setGender(history.getSerie().getGender());
+            serie.setNote(history.getSerie().getNote());
+            serie.setTitle(history.getSerie().getTitle());
+            serie.setNbEpisodes(history.getSerie().getNbEpisodes());
+            serieList.add(serie);
+        }
+        return serieList;
     }
 
     public boolean addToHistory(String peopleId, String seriesId) {
@@ -41,6 +53,8 @@ public class HistoryService {
         historyRepository.save(history);
         return true;
     }
+
+
 
 
 
