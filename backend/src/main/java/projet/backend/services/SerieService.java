@@ -57,7 +57,7 @@ public class SerieService {
         if (genre == null || genre.isEmpty()) {
             return serieRepository.findAll();
         } else {
-            return serieRepository.findByGenre(genre);
+            return serieRepository.findByGender(genre);
         }
     }
 
@@ -66,13 +66,13 @@ public class SerieService {
             return serieRepository.findAll();
         }
         else if (genre != null && !genre.isEmpty() && minEpisodes == null) {
-            return serieRepository.findByGenre(genre);
+            return serieRepository.findByGender(genre);
         }
         else if ((genre == null || genre.isEmpty()) && minEpisodes != null) {
             return serieRepository.findByNbEpisodesGreaterThanEqual(minEpisodes);
         }
         else {
-            List<Serie> series = serieRepository.findByGenre(genre);
+            List<Serie> series = serieRepository.findByGender(genre);
             List<Serie> filteredSeries = new ArrayList<>();
             for (Serie serie : series) {
                 if (serie.getNbEpisodes() >= minEpisodes) {

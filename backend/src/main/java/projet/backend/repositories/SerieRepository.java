@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface SerieRepository extends JpaRepository<Serie, Long> {
     Serie findSerieById(long id);
-    List<Serie> findByGenre(String genre);
+    List<Serie> findByGender(String genre);
     List<Serie> findByNbEpisodesGreaterThanEqual(int nbEpisodes);
     List<Serie> findByTitle(String title);
 
