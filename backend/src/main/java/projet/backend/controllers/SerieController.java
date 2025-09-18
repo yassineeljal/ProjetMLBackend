@@ -1,9 +1,7 @@
 package projet.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import projet.backend.models.People;
 import projet.backend.models.Serie;
 import projet.backend.services.SerieService;
 
@@ -19,27 +17,27 @@ public class SerieController {
 
     @GetMapping
     public List<Serie> getAllSeries() {
-        return serieService.
+        return serieService.getAllSeries();
     }
 
     @GetMapping("/user/{id}")
-    public List<Serie> getSeriesDetails(@PathVariable("id") String id) {
-        return serieService.
+    public Serie getSeriesDetails(@PathVariable("id") String id) {
+        return serieService.getSerieById(id);
     }
 
     @PostMapping("/addSerie")
     public boolean addUser(@RequestBody Serie serie) {
-        return serieService.
+        return serieService.addSerie(serie);
     }
 
     @PutMapping("/serie")
     public void updateUser(@RequestBody Serie serie){
-        serieService.
+        serieService.updateSerie(serie);
     }
 
     @DeleteMapping("/user/{id}")
     public void deleteUser(@PathVariable("id") String id){
-        serieService.
+        serieService.deleteSerie(id);
     }
 
 
