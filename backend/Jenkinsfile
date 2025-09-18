@@ -2,49 +2,25 @@ pipeline {
 	agent any
 
     tools {
-		jdk 'jdk17'
-    }
-
-    environment {
-        MVN_HOME = tool name: 'maven', type: 'hudson.tasks.Maven$MavenInstallation'
-        MVN = "%MVN_HOME%\\bin\\mvn.cmd"
+		maven 'maven'
+        jdk 'jdk17'
     }
 
     stages {
-		stage('Checkout') {
+		stage('Build') {
 			steps {
-				checkout scm
+				bat 'mvn clean compile'
             }
         }
-
-        stage('Build') {
-			steps {
-				bat "\"%MVN%\" -v"
-                bat "\"%MVN%\" -B -f backend/pom.xml clean compile"
-            }
-        }
-
         stage('Test') {
 			steps {
-				bat "\"%MVN%\" -B -f backend/pom.xml test"
-            }
-            post {
-				always {
-					junit 'backend/**/target/surefire-reports/*.xml'
-                }
+				bat 'mvn test'
             }
         }
-
         stage('Package') {
 			steps {
-				bat "\"%MVN%\" -B -f backend/pom.xml package"
+				bat 'mvn package'
             }
-        }
-    }
-
-    post {
-		success {
-			archiveArtifacts artifacts: 'backend/**/target/*.jar', fingerprint: true
         }
     }
 }
