@@ -47,7 +47,6 @@ pipeline {
 
   post {
 		success {
-			// archive le .jar construit
       archiveArtifacts artifacts: 'backend/target/*.jar', fingerprint: true
     }
   }
