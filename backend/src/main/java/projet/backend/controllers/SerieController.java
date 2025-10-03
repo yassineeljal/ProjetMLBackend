@@ -1,9 +1,12 @@
+// src/main/java/projet/backend/controllers/SerieController.java
 package projet.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import projet.backend.dto.TrendingItem;   // 👈 important
 import projet.backend.models.Serie;
 import projet.backend.services.SerieService;
+import projet.backend.services.TrendingService;
 
 import java.util.List;
 
@@ -14,6 +17,9 @@ public class SerieController {
 
     @Autowired
     SerieService serieService;
+
+    @Autowired
+    TrendingService trendingService;
 
     @GetMapping
     public List<Serie> getAllSeries() {
@@ -40,9 +46,9 @@ public class SerieController {
         serieService.deleteSerie(id);
     }
 
-
     @GetMapping("/search")
-    public List<Serie> searchSeries(@RequestParam(required = false) String genre,@RequestParam(required = false) Integer minEpisodes ) {
+    public List<Serie> searchSeries(@RequestParam(required = false) String genre,
+                                    @RequestParam(required = false) Integer minEpisodes ) {
         return serieService.search(genre, minEpisodes);
     }
 
@@ -51,4 +57,9 @@ public class SerieController {
         return serieService.searchByTitle(title);
     }
 
+    // 👇 ICI: typage DTO pour matcher TrendingService.topTrending(int): List<TrendingItem>
+    @GetMapping("/trending")
+    public List<TrendingItem> trending(@RequestParam(defaultValue = "10") int limit) {
+        return trendingService.topTrending(limit);
+    }
 }
