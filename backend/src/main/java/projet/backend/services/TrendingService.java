@@ -1,11 +1,9 @@
 package projet.backend.services;
-
 import org.springframework.stereotype.Service;
 import projet.backend.dto.TrendingItem;
 import projet.backend.models.Serie;
 import projet.backend.repositories.HistoryRepository;
 import projet.backend.repositories.SerieRepository;
-
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;

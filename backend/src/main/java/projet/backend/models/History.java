@@ -1,4 +1,3 @@
-// src/main/java/projet/backend/models/History.java
 package projet.backend.models;
 
 import jakarta.persistence.*;
