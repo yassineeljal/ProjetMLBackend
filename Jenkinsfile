@@ -1,11 +1,6 @@
 pipeline {
   agent any
-
-  options {
-    timestamps()
-    skipDefaultCheckout(true)
-  }
-
+  options { skipDefaultCheckout(true) }
   stages {
     stage('Checkout') {
       steps {
@@ -16,7 +11,8 @@ pipeline {
     stage('Build & Test') {
       steps {
         dir('backend') {
-          sh 'mvn -B clean test'
+          sh 'chmod +x mvnw'
+          sh './mvnw -B clean test'
         }
       }
       post {
@@ -29,12 +25,7 @@ pipeline {
     stage('Package') {
       steps {
         dir('backend') {
-          sh 'mvn -B package'
-        }
-      }
-      post {
-        success {
-          archiveArtifacts artifacts: 'backend/target/*.jar', fingerprint: true
+          sh './mvnw -B package -DskipTests=false'
         }
       }
     }
@@ -42,22 +33,7 @@ pipeline {
     stage('JaCoCo (verify)') {
       steps {
         dir('backend') {
-          sh 'mvn -B verify'
-        }
-      }
-      post {
-        always {
-          jacoco(
-            execPattern: 'backend/target/jacoco.exec',
-            classPattern: 'backend/target/classes',
-            sourcePattern: 'backend/src/main/java',
-            changeBuildStatus: true
-          )
-          publishHTML(target: [
-            reportDir: 'backend/target/site/jacoco',
-            reportFiles: 'index.html',
-            reportName: 'JaCoCo HTML'
-          ])
+          sh './mvnw -B verify'
         }
       }
     }
@@ -65,8 +41,13 @@ pipeline {
     stage('Docker Build (monapp:${BUILD_NUMBER})') {
       steps {
         sh 'docker build -t monapp:${BUILD_NUMBER} -f Dockerfile.app .'
-        sh 'docker images | head -n 10'
       }
+    }
+  }
+  post {
+    success {
+      archiveArtifacts artifacts: 'backend/target/*.jar', fingerprint: true
+      echo "Build ${env.BUILD_NUMBER} OK"
     }
   }
 }
