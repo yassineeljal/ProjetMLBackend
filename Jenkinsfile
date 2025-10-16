@@ -46,14 +46,22 @@ pipeline {
                 sh 'docker build -t monapp:${BUILD_NUMBER} -f Dockerfile.app .'
             }
         }
+
+        stage('Run Container') {
+            steps {
+                sh 'docker rm -f monapp-container || true'
+
+                sh 'docker run -d --name monapp-container -p 8080:8080 monapp:${BUILD_NUMBER}'
+            }
+        }
     }
 
     post {
         success {
-            echo '✅ BUILD SUCCESS — Tout fonctionne parfaitement !'
+            echo 'BUILD & DEPLOY SUCCESS — ton backend tourne dans Docker !'
         }
         failure {
-            echo '❌ BUILD FAILED — Vérifie les logs pour identifier le problème.'
+            echo 'BUILD FAILED — vérifie les logs Jenkins pour corriger les erreurs.'
         }
     }
 }
