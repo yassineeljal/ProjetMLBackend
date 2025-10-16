@@ -1,6 +1,3 @@
-*
-!Dockerfile.app
-!pom.xml
-!src/
-!target/
-!target/*.jar
+.git
+.idea
+node_modules
