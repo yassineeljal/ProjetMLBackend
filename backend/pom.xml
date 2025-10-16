@@ -82,7 +82,6 @@
         </configuration>
       </plugin>
 
-<<<<<<< HEAD
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -101,15 +100,12 @@
         </dependency>
 
 
-        <!--Apartir dici j'ai rajouter des dependance(Arda)-->
 
-        <!-- Spring Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -128,7 +124,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- BCrypt pour hachage des mots de passe -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>
@@ -144,7 +139,6 @@
             </plugin>
         </plugins>
     </build>
-=======
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
@@ -186,7 +180,6 @@
           </execution>
         </executions>
       </plugin>
->>>>>>> 18c1fe2 (docker)
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
