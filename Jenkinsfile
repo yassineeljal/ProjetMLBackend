@@ -41,7 +41,11 @@ pipeline {
 
         stage('Docker Build (monapp:${BUILD_NUMBER})') {
             steps {
+                sh 'ls -la backend/target'
+
                 sh 'cp backend/target/*.jar .'
+
+                sh 'ls -la'
 
                 sh 'docker build -t monapp:${BUILD_NUMBER} -f Dockerfile.app .'
             }
@@ -58,10 +62,10 @@ pipeline {
 
     post {
         success {
-            echo 'BUILD & DEPLOY SUCCESS — ton backend tourne dans Docker !'
+            echo '✅ BUILD & DEPLOY SUCCESS — ton backend tourne dans Docker sur le port 8080 !'
         }
         failure {
-            echo 'BUILD FAILED — vérifie les logs Jenkins pour corriger les erreurs.'
+            echo '❌ BUILD FAILED — vérifie les logs Jenkins pour corriger les erreurs.'
         }
     }
 }
