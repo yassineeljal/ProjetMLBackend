@@ -55,17 +55,15 @@ pipeline {
         stage('Run Container') {
             steps {
                 sh '''
-                # Supprimer tout ancien conteneur avec le même nom
                 docker rm -f monapp-container || true
 
-                # Si un conteneur occupe le port 9090, on le supprime
                 existing=$(docker ps -q --filter "publish=9090")
                 if [ -n "$existing" ]; then
-                  echo "⚠️ Un conteneur utilise déjà le port 9090, on le supprime..."
+                  echo "Un conteneur utilise déjà le port 9090, on le supprime..."
                   docker rm -f $existing
                 fi
 
-                # Lancer le nouveau conteneur sur le port 9090
+                
                 docker run -d --name monapp-container -p 9090:8080 monapp:${BUILD_NUMBER}
                 '''
             }
@@ -74,10 +72,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ BUILD & DEPLOY SUCCESS — ton backend tourne sur le port 9090 !"
+            echo "BUILD & DEPLOY SUCCESS"
         }
         failure {
-            echo "❌ BUILD FAILED — vérifie les logs Jenkins pour corriger les erreurs."
+            echo "BUILD FAILED"
         }
     }
 }
