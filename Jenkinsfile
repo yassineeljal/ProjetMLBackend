@@ -1,8 +1,12 @@
 pipeline {
     agent any
 
-    stages {
+    environment {
+        DOCKER_IMAGE = "monapp:${BUILD_NUMBER}"
+        CONTAINER_NAME = "monapp-container"
+    }
 
+    stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/yassineeljal/ProjetMLBackend.git'
@@ -18,7 +22,7 @@ pipeline {
             }
             post {
                 always {
-                    junit 'backend/target/surefire-reports/*.xml'
+                    junit '**/target/surefire-reports/*.xml'
                 }
             }
         }
@@ -42,30 +46,38 @@ pipeline {
         stage('Docker Build (monapp:${BUILD_NUMBER})') {
             steps {
                 sh 'ls -la backend/target'
-
-                sh 'cp backend/target/*.jar .'
-
+                sh 'cp backend/target/backend-0.0.1-SNAPSHOT.jar .'
                 sh 'ls -la'
-
                 sh 'docker build -t monapp:${BUILD_NUMBER} -f Dockerfile.app .'
             }
         }
 
         stage('Run Container') {
             steps {
-                sh 'docker rm -f monapp-container || true'
+                sh '''
+                # Supprimer tout ancien conteneur avec le même nom
+                docker rm -f monapp-container || true
 
-                sh 'docker run -d --name monapp-container -p 8080:8080 monapp:${BUILD_NUMBER}'
+                # Si un conteneur occupe le port 9090, on le supprime
+                existing=$(docker ps -q --filter "publish=9090")
+                if [ -n "$existing" ]; then
+                  echo "⚠️ Un conteneur utilise déjà le port 9090, on le supprime..."
+                  docker rm -f $existing
+                fi
+
+                # Lancer le nouveau conteneur sur le port 9090
+                docker run -d --name monapp-container -p 9090:8080 monapp:${BUILD_NUMBER}
+                '''
             }
         }
     }
 
     post {
         success {
-            echo '✅ BUILD & DEPLOY SUCCESS — ton backend tourne dans Docker sur le port 8080 !'
+            echo "✅ BUILD & DEPLOY SUCCESS — ton backend tourne sur le port 9090 !"
         }
         failure {
-            echo '❌ BUILD FAILED — vérifie les logs Jenkins pour corriger les erreurs.'
+            echo "❌ BUILD FAILED — vérifie les logs Jenkins pour corriger les erreurs."
         }
     }
 }
