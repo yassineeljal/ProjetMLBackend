@@ -1,4 +1,3 @@
-//Sert à charger les informations d’un utilisateur depuis la base de données
 
 package projet.backend.security;
 

@@ -1,7 +1,4 @@
-//Ce fichier sert à gérer les routes endpoints qui permettent à un utilisateur de:
-//Créer un compte
-//Se connecter et recevoir un token JWT
-//En gros c’est le point d’entrée de l'API pour tout ce qui touche à l’inscription et la connexion.
+
 
 package projet.backend.controllers;
 

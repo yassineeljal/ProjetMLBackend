@@ -1,8 +1,4 @@
-//Ce fichier permet de filtrer chaque requête envoyée à ton API.
-//Il vérifie:
-//si la requête contient un token JWT
-//si le token est valide
-//S’il n’y a pas de token ou qu’il est invalide, la requête est bloquée
+
 
 package projet.backend.security;
 

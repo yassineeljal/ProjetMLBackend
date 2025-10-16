@@ -3,20 +3,16 @@ dev-build dev-run dev-exec dev-test dev-verify dev-stop dev-restart javadoc \
 docker-package docker-build docker-run stop-app logs \
 ensure-ci-net db-up db-wait db-down
 
-### ===== Variables =====
-# Dev toolchain (container avec Maven + JDK + Git)
+
 IMAGE_DEV      ?= dev-mvn:latest
 DEV_CONTAINER  ?= dev-mvn-run
 MVN_OPTS       ?= -Dproject.build.sourceEncoding=UTF-8 -Dfile.encoding=UTF-8
-# Si ton pom.xml est à la racine du dépôt (~/maintenance/ProjetMLBackend/backend/pom.xml)
 POM_PATH       ?= /app/pom.xml
 MOUNT_DIR      ?= $(PWD)/backend
 
-# App runtime (image qui embarque ton JAR Spring Boot)
 IMAGE_APP      ?= monapp:local
 APP_CONTAINER  ?= monapp-run
 
-# Réseau + DB
 CI_NET         ?= ci_net
 DB_CONTAINER   ?= mariadb-ci
 DB_NAME        ?= projetml
@@ -46,9 +42,6 @@ help:
 	@echo "make db-down        -> stop DB"
 	@echo ""
 
-### ===== Section DEV (outil Maven/JDK) =====
-# Option A: tu as déjà une image dev-mvn:latest -> passe direct à dev-run
-# Option B: build ici (nécessite un Dockerfile.dev dans le même dossier)
 dev-build:
 	@docker build -t $(IMAGE_DEV) -f Dockerfile.dev .
 
@@ -74,16 +67,13 @@ dev-restart: dev-stop dev-run
 javadoc:
 	docker exec -it $(DEV_CONTAINER) mvn -B -f $(POM_PATH) javadoc:javadoc
 
-### ===== Packaging + Runtime =====
-# Produit le JAR à partir du conteneur de dev (qui a Maven)
+
 docker-package:
 	docker exec -it $(DEV_CONTAINER) mvn -B -f $(POM_PATH) clean package
 
-# Construit l'image d'exécution (copie backend/target/*.jar -> app.jar)
 docker-build:
 	docker build -t $(IMAGE_APP) -f Dockerfile.app .
 
-# Réseau et DB
 ensure-ci-net:
 	-@docker network create $(CI_NET) 2>/dev/null || true
 
@@ -97,7 +87,6 @@ db-up: ensure-ci-net
 		-p $(DB_PORT):3306 \
 		mariadb:11.4
 
-# Attente DB prête (ping avec mariadb client dans le conteneur DB)
 db-wait:
 	@echo "Attente de la DB $(DB_CONTAINER) ..."
 	@for i in $$(seq 1 30); do \
@@ -106,7 +95,6 @@ db-wait:
 	done; \
 	echo "DB pas prête après attente." && exit 1
 
-# Lance l'app après DB + réseau
 docker-run: stop-app ensure-ci-net db-up db-wait
 	docker run -d --name $(APP_CONTAINER) --network $(CI_NET) -p 8888:8888 \
 		-e SPRING_DATASOURCE_URL="jdbc:mariadb://$(DB_CONTAINER):$(DB_PORT)/$(DB_NAME)" \

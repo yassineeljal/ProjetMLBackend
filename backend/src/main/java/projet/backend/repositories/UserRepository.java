@@ -1,4 +1,3 @@
-//Sert a communiquer avec la base de donnee
 
 package projet.backend.repositories;
 

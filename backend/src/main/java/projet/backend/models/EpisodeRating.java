@@ -10,7 +10,6 @@ public class EpisodeRating {
     @ManyToOne(optional = false) private People people;
     @ManyToOne(optional = false) private Episode episode;
 
-    // 1..5
     private int value;
 
     public Long getId() { return id; }

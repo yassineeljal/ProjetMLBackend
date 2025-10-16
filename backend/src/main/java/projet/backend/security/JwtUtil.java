@@ -1,4 +1,3 @@
-// Sert à générer, lire et vérifier les tokens JWT
 
 package projet.backend.security;
 
@@ -12,8 +11,8 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "test"; //sa sert a signer les token jwt pour la verification
-    private final long EXPIRATION_TIME = 1000 * 60 * 60; // 1h
+    private final String SECRET_KEY = "test";
+    private final long EXPIRATION_TIME = 1000 * 60 * 60;
 
     public String generateToken(String username) {
         return Jwts.builder()

@@ -1,7 +1,4 @@
-//Sert à configurer les règles de sécurité de ton API
-//qui peut accéder à quelle route
-//comment les utilisateurs s’authentifient
-//comment les tokens JWT sont vérifiés
+
 
 
 package projet.backend.security;
