@@ -1,3 +1,4 @@
+
 INSERT INTO people (age, gender, name) VALUES
                                            (22, 'F', 'Alice Martin'),
                                            (28, 'H', 'Karim Benali'),
@@ -30,25 +31,24 @@ INSERT INTO people (age, gender, name) VALUES
                                            (27, 'F', 'Lina Moreau'),
                                            (35, 'Autre', 'Sam Beaulieu');
 
--- Serie (note est une String → entre quotes ; 'gender' = genre de la série)
-INSERT INTO serie (title, gender, nb_Episodes, note) VALUES
-                                                        ('Breaking Bad', 'Drama', 62, '4.9'),
-                                                        ('One Piece', 'Anime', 1100, '4.7'),
-                                                        ('Stranger Things', 'Sci-Fi', 34, '4.5'),
-                                                        ('Naruto', 'Anime', 720, '4.6'),
-                                                        ('Game of Thrones', 'Fantasy', 73, '4.4'),
-                                                        ('The Office', 'Comedy', 201, '4.3'),
-                                                        ('Attack on Titan', 'Anime', 87, '4.8'),
-                                                        ('Friends', 'Comedy', 236, '4.2'),
-                                                        ('The Witcher', 'Fantasy', 24, '4.0'),
-                                                        ('Better Call Saul', 'Drama', 63, '4.6'),
-                                                        ('Fullmetal Alchemist: Brotherhood', 'Anime', 64, '4.8'),
-                                                        ('The Mandalorian', 'Sci-Fi', 24, '4.4'),
-                                                        ('Dark', 'Sci-Fi', 26, '4.7'),
-                                                        ('Death Note', 'Anime', 37, '4.9'),
-                                                        ('Peaky Blinders', 'Drama', 36, '4.5'),
-                                                        ('How I Met Your Mother', 'Comedy', 208, '4.1'),
-                                                        ('Vikings', 'Historical', 89, '4.3'),
-                                                        ('Black Mirror', 'Sci-Fi', 27, '4.2'),
-                                                        ('Demon Slayer', 'Anime', 55, '4.7'),
-                                                        ('Sherlock', 'Mystery', 13, '4.8');
+INSERT INTO serie (title, gender, nb_episodes, note) VALUES
+                                                         ('Breaking Bad', 'Drama', 62, '4.9'),
+                                                         ('One Piece', 'Anime', 1100, '4.7'),
+                                                         ('Stranger Things', 'Sci-Fi', 34, '4.5'),
+                                                         ('Naruto', 'Anime', 720, '4.6'),
+                                                         ('Game of Thrones', 'Fantasy', 73, '4.4'),
+                                                         ('The Office', 'Comedy', 201, '4.3'),
+                                                         ('Attack on Titan', 'Anime', 87, '4.8'),
+                                                         ('Friends', 'Comedy', 236, '4.2'),
+                                                         ('The Witcher', 'Fantasy', 24, '4.0'),
+                                                         ('Better Call Saul', 'Drama', 63, '4.6'),
+                                                         ('Fullmetal Alchemist: Brotherhood', 'Anime', 64, '4.8'),
+                                                         ('The Mandalorian', 'Sci-Fi', 24, '4.4'),
+                                                         ('Dark', 'Sci-Fi', 26, '4.7'),
+                                                         ('Death Note', 'Anime', 37, '4.9'),
+                                                         ('Peaky Blinders', 'Drama', 36, '4.5'),
+                                                         ('How I Met Your Mother', 'Comedy', 208, '4.1'),
+                                                         ('Vikings', 'Historical', 89, '4.3'),
+                                                         ('Black Mirror', 'Sci-Fi', 27, '4.2'),
+                                                         ('Demon Slayer', 'Anime', 55, '4.7'),
+                                                         ('Sherlock', 'Mystery', 13, '4.8');

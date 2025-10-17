@@ -1,71 +1,65 @@
-//Ce fichier sert à gérer les routes endpoints qui permettent à un utilisateur de:
-//Créer un compte
-//Se connecter et recevoir un token JWT
-//En gros c’est le point d’entrée de l'API pour tout ce qui touche à l’inscription et la connexion.
-
 package projet.backend.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import projet.backend.dto.AuthRequest;
+import projet.backend.dto.AuthResponse;
 import projet.backend.models.User;
 import projet.backend.repositories.UserRepository;
 import projet.backend.security.JwtUtil;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5173"}, allowCredentials = "true")
 public class AuthentificationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
+    public AuthentificationController(AuthenticationManager authenticationManager,
+                                      UserRepository userRepository,
+                                      PasswordEncoder passwordEncoder,
+                                      JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+    }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+    public ResponseEntity<?> registerUser(@RequestBody AuthRequest req) {
+        if (req.username() == null || req.username().isBlank() || req.password() == null || req.password().isBlank()) {
+            return ResponseEntity.badRequest().body("Username et mot de passe obligatoires");
+        }
+
+        if (userRepository.findByUsername(req.username()).isPresent()) {
             return ResponseEntity.badRequest().body("Nom d'utilisateur déjà pris");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        User u = new User();
+        u.setUsername(req.username());
+        u.setPassword(passwordEncoder.encode(req.password()));
+        u = userRepository.save(u);
 
-        return ResponseEntity.ok("Utilisateur enregistré avec succès !");
+        String token = jwtUtil.generateToken(u.getUsername());
+        return ResponseEntity.ok(new AuthResponse(u.getId(), u.getUsername(), token));
     }
 
-
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest req) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+                    new UsernamePasswordAuthenticationToken(req.username(), req.password())
             );
-
-
-            String token = jwtUtil.generateToken(user.getUsername());
-
-            Map<String, String> response = new HashMap<>();
-            response.put("token", token);
-
-            return ResponseEntity.ok(response);
-
+            User u = userRepository.findByUsername(req.username()).orElseThrow();
+            String token = jwtUtil.generateToken(u.getUsername());
+            return ResponseEntity.ok(new AuthResponse(u.getId(), u.getUsername(), token));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(401).body("Identifiants invalides");
         } catch (AuthenticationException e) {
