@@ -10,6 +10,7 @@ public class SeriesRating {
     @ManyToOne(optional = false) private People people;
     @ManyToOne(optional = false) private Serie serie;
 
+    // 1..5
     private int value;
 
     public Long getId() { return id; }
